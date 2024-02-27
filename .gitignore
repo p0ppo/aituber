@@ -161,4 +161,5 @@ cython_debug/
 
 # My own settings
 character.txt
+sound_device.txt
 tmp/

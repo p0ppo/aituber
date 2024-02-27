@@ -11,7 +11,7 @@ class Adapter:
         self._set_client()
         self.segment = segment
         if segment:
-            self._segmenter = Segmenter()
+            self._segmenter = Segmenter(max_characters=140)
     
     def _set_system_prompt(self):
         character_file = "character.txt"
@@ -62,6 +62,9 @@ if __name__ == "__main__":
     #test_message = adapter.create_chat("こんにちは！")
     test_message, segmented_message = adapter.create_chat("君のことを教えて？")
     print(test_message)
+    print(segmented_message)
+    for s in segmented_message:
+        print(len(s))
 
     narrator = "Miyamai Moca"
     emotion = {
