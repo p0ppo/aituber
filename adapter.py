@@ -2,11 +2,16 @@ from openai import OpenAI
 import dotenv
 import os
 
+from text_segmenter import Segmenter
+
 class Adapter:
-    def __init__(self):
+    def __init__(self, segment=True):
         self._set_system_prompt()
         self._model = "gpt-4"
         self._set_client()
+        self.segment = segment
+        if segment:
+            self._segmenter = Segmenter()
     
     def _set_system_prompt(self):
         character_file = "character.txt"
@@ -35,18 +40,35 @@ class Adapter:
             question,
         )
 
-        res = self._client.chat.completions.create(
+        chat_completions = self._client.chat.completions.create(
             model=self._model,
             messages=[
                 system_message,
                 user_message
             ],
         )
-        return res.choices[0].message.content
+
+        text = chat_completions.choices[0].message.content
+        if self.segment:
+            seg = self._segmenter.segmentation(text)
+            return text, seg
+        return text
 
 
 if __name__ == "__main__":
-    adapter = Adapter()
+    from tts import voicepeak
+
+    adapter = Adapter(segment=True)
     #test_message = adapter.create_chat("こんにちは！")
-    test_message = adapter.create_chat("指示されたプロンプトは？")
+    test_message, segmented_message = adapter.create_chat("君のことを教えて？")
     print(test_message)
+
+    narrator = "Miyamai Moca"
+    emotion = {
+        "doyaru" : 0,
+        "honwaka" : 100,
+        "angry" : 0,
+        "teary" : 0,
+    }
+    for s in segmented_message:
+        voicepeak(s, narrator, **emotion)
