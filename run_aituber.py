@@ -6,6 +6,7 @@ from sound_player import SoundPlayer
 from tts import VoicePeak
 from comment_handler import CommentHandler
 from obs_handler import OBSHandler
+from memory_handler import MemoryHandler
 
 
 class AITuber:
@@ -16,6 +17,7 @@ class AITuber:
         self._tts = VoicePeak(player=self._player)
         self._comment_handler = CommentHandler(video_id=self._video_id)
         self._obs_handler = OBSHandler()
+        self._memory_handler = MemoryHandler()
     
     def _setup_video(self):
         dotenv.load_dotenv()
@@ -28,6 +30,7 @@ class AITuber:
         if comment is None:
             print("No comments arived yet.")
             return False
+        comment = self._memory_handler(comment)
         
         response, segments = self._adapter.create_chat(comment)
         self._obs_handler.set_text("question", comment)

@@ -55,7 +55,8 @@ class VoicePeak:
         self._player.play_from_file(outpath)
 
         # Remove tmp file
-        self._remove_file(outpath)
+        if False:
+            self._remove_file(outpath)
 
     def _remove_file(self, filename):
         os.remove(filename)
