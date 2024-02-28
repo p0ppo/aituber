@@ -1,4 +1,4 @@
-from lib import launch
+from src import launch
 
 def main():
     launch()
