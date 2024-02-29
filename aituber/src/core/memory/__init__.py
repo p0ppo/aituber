@@ -39,7 +39,7 @@ def get(identifier):
     if isinstance(identifier, str):
         to_get = {k.lower(): v for k, v in globals().items()}
         cls_name = memory_handler_alias[identifier.lower()]
-        cls = to_get.get(cls_name)
+        cls = to_get.get(cls_name.lower())
         if cls is None:
             raise ValueError(f"Could not interpret memory handler name : {str(identifier)}")
         return cls
