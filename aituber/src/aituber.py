@@ -1,38 +1,41 @@
 import os
 import dotenv
 
-from adapter import Adapter
-from sound_player import SoundPlayer
-from tts import VoicePeak
-from comment_handler import CommentHandler
-from obs_handler import OBSHandler
-from memory_handler import MemoryHandler
+from .core.chat import Agent, SoundPlayer, VoicePeak
+from .network import CommentHandler, OBSHandler
 
 
 class AITuber:
     def __init__(self):
-        self._setup_video()
-        self._adapter = Adapter(segment=True)
+        dotenv.load_dotenv()
+
+        # Core modules
+        self._setup_core()
+
+        # Network modules
+        self._setup_network()
+    
+    def _setup_core(self):
+        self._agent = Agent(segment=True)
         self._player = SoundPlayer()
         self._tts = VoicePeak(player=self._player)
+    
+    def _setup_network(self):
+        self._video_id = os.environ.get("YOUTUBE_VIDEO_ID")
         self._comment_handler = CommentHandler(video_id=self._video_id)
         self._obs_handler = OBSHandler()
-        self._memory_handler = MemoryHandler()
-    
-    def _setup_video(self):
-        dotenv.load_dotenv()
-        self._video_id = os.environ.get("YOUTUBE_VIDEO_ID")
     
     def __call__(self):
         print("Reading comments...")
 
         comment = self._comment_handler.get_comment()
         if comment is None:
-            print("No comments arived yet.")
+            print("No comments have arived yet.")
             return False
-        comment = self._memory_handler(comment)
         
-        response, segments = self._adapter.create_chat(comment)
+        response, segments = self._agent.get_messages(comment)
+        print(response)
+
         self._obs_handler.set_text("question", comment)
         self._obs_handler.set_text("answer", response)
         self._tts.run(segments)
