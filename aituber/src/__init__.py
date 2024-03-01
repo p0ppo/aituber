@@ -1,7 +1,10 @@
 import time
+import click
+
 from .aituber import AITuber
 
 
+@click.command(name="launch")
 def launch():
     aituber = AITuber()
     while True:

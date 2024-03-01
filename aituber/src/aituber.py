@@ -1,7 +1,7 @@
 import os
 import dotenv
 
-from .core.chat import ChatBot, SoundPlayer, VoicePeak
+from .core.chat import Agent, SoundPlayer, VoicePeak
 from .network import CommentHandler, OBSHandler
 
 
@@ -10,12 +10,15 @@ class AITuber:
         dotenv.load_dotenv()
 
         # Core modules
-        self._chatbot = ChatBot(segment=True)
-        self._player = SoundPlayer()
-        self._tts = VoicePeak(player=self._player)
+        self._setup_core()
 
         # Network modules
         self._setup_network()
+    
+    def _setup_core(self):
+        self._agent = Agent(segment=True)
+        self._player = SoundPlayer()
+        self._tts = VoicePeak(player=self._player)
     
     def _setup_network(self):
         self._video_id = os.environ.get("YOUTUBE_VIDEO_ID")
@@ -30,7 +33,7 @@ class AITuber:
             print("No comments have arived yet.")
             return False
         
-        response, segments = self._chatbot.get_messages(comment)
+        response, segments = self._agent.get_messages(comment)
         print(response)
 
         self._obs_handler.set_text("question", comment)

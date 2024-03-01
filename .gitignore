@@ -163,3 +163,4 @@ cython_debug/
 character.txt
 sound_device.txt
 tmp/
+vec/

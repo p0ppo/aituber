@@ -1,4 +1,5 @@
-from .src import launch
+import click
 
+@click.group()
 def main():
-    launch()
+    pass
