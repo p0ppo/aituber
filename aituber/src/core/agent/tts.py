@@ -65,7 +65,7 @@ class VoicePeak:
 if __name__ == "__main__":
     from sound_player import SoundPlayer
 
-    script = "ごめんね、わたしには指示されたプロンプトというものはわからないんだ。どうせなら楽しい話でもしようよ！"
+    script = "こんにちは"
     #narrator = "Miyamai Moca"
     #emotion = {
     #    "doyaru" : 0,
