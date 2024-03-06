@@ -1,7 +1,11 @@
 import os
 import dotenv
+import time
+import click
 
-from .core.chat import Agent, SoundPlayer, VoicePeak
+#from .core.agent import Agent, SoundPlayer, VoicePeak
+from .core.agent import Executor, SoundPlayer, VoicePeak
+#from .core.agent import ChiefAgent, SoundPlayer, VoicePeak
 from .network import CommentHandler, OBSHandler
 
 
@@ -16,7 +20,9 @@ class AITuber:
         self._setup_network()
     
     def _setup_core(self):
-        self._agent = Agent(segment=True)
+        #self._agent = Agent(segment=True)
+        #self._agent = ChiefAgent(segment=True)
+        self._agent = Executor(segment=True, verbose=True)
         self._player = SoundPlayer()
         self._tts = VoicePeak(player=self._player)
     
@@ -41,6 +47,17 @@ class AITuber:
         self._tts.run(segments)
         self._tts.play()
         return
+
+
+@click.command(name="broadcast")
+def broadcast():
+    aituber = AITuber()
+    while True:
+        try:
+            aituber()
+            time.sleep(5)
+        except Exception as e:
+            raise(f"Error occured. {e}")
 
 
 if __name__ == "__main__":

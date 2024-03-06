@@ -10,8 +10,13 @@ def get_text_by_region(url, start_s, end_s):
     response = requests.get(url)
     html = response.content.decode("utf-8")
     st_split = html.split(start_s)
+
+    # Only take clean text
     if len(st_split) != 2:
         return None
+    if len(st_split[1].split(end_s)) != 2:
+        return None
+
     text = st_split[1].split(end_s)[0]
     text_re = re.sub(re.compile('<.*?>'), '', text)
     return text_re
