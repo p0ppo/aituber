@@ -166,3 +166,4 @@ tmp/
 vec/
 legacy/
 templates/
+.chainlit/
