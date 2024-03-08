@@ -9,7 +9,7 @@ from langchain.schema.runnable.config import RunnableConfig
 from langchain.schema import StrOutputParser
 
 sys.path.append(os.path.join(os.getcwd(), "aituber/src"))
-from core.agent import Executor
+from agent import Executor
 
 
 @cl.on_chat_start

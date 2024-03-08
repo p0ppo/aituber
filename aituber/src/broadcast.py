@@ -4,7 +4,7 @@ import time
 import click
 
 #from .core.agent import Agent, SoundPlayer, VoicePeak
-from .core.agent import Executor, SoundPlayer, VoicePeak
+from .agent import Executor, SoundPlayer, VoicePeak
 #from .core.agent import ChiefAgent, SoundPlayer, VoicePeak
 from .network import CommentHandler, OBSHandler
 

@@ -62,7 +62,7 @@ class Executor:
         self._set_database()
         
         # Integrate altoghther
-        self._set_prompt()
+        #self._set_prompt()
         self._set_memory()
 
         self._set_nodes()
@@ -200,19 +200,6 @@ class Executor:
             memory=self._read_only_memory,
             tools=self._tools,
             verbose=self._verbose,
-        )
-
-    def _set_prompt(self):
-        character_file = os.environ.get("CHARACTER_PATH")
-        with open(character_file, "r", encoding="utf-8") as f:
-            self._system_prompt = f.read()
-        self._prompt = ChatPromptTemplate.from_messages(
-            [
-                SystemMessagePromptTemplate.from_template(self._system_prompt),
-                MessagesPlaceholder(variable_name="chat_history"),
-                HumanMessagePromptTemplate.from_template("{input}"),
-                MessagesPlaceholder(variable_name="agent_scratchpad")
-            ]
         )
     
     def get_agent(self):

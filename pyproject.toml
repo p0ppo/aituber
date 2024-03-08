@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "aituber"
+version = "0.1.0"
+description = ""
+authors = ["p0ppo"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+mjx = {path = "external/mjx"}
+click = "<=8.1.7"
+python-dotenv = "<=1.0.1"
+sounddevice = "<=0.4.6"
+soundfile = "<=0.12.1"
+beautifulsoup4 = "<=4.12.3"
+chromadb = "<=0.4.24"
+langchain = "<=0.1.9"
+langchain-openai = "<=0.0.8"
+ja-sentence-segmenter = "<=0.0.2"
+sentence-transformers = "<=2.5.0"
+pytchat = "<=0.5.5"
+obsws-python = "<=1.7.0"
+chainlit = "<=1.0.301"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

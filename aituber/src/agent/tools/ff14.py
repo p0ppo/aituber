@@ -2,7 +2,7 @@ from typing import Annotated, List, Tuple, Union
 
 from langchain.agents import Tool, load_tools
 from langchain.chains import RetrievalQA
-from langchain.vectorstores import Chroma
+from langchain_community.vectorstores import Chroma
 from langchain_openai import ChatOpenAI
 from langchain_core.tools import tool
 from pydantic.v1 import BaseModel, Field
