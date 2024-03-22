@@ -22,6 +22,7 @@ from langchain.prompts import (
     MessagesPlaceholder, 
     SystemMessagePromptTemplate, 
     HumanMessagePromptTemplate,
+    PromptTemplate,
 )
 from langchain.schema import AgentAction, AgentFinish, OutputParserException
 from langchain.agents import AgentType, initialize_agent, Tool, AgentExecutor
@@ -55,6 +56,12 @@ class Executor:
             openai_api_key=os.environ.get("OPENAI_API_KEY"),
             model_name="gpt-3.5-turbo",
             streaming=True, 
+        )
+        self._llm_zero = ChatOpenAI(
+            openai_api_key=os.environ.get("OPENAI_API_KEY"),
+            model_name="gpt-3.5-turbo",
+            streaming=True, 
+            temperature=0,
         )
 
         # Retrieval Augmented Generation (RAG) settings
@@ -163,6 +170,27 @@ class Executor:
             memory=self._read_only_memory,
         )
 
+        agent_kwargs = {
+            #"system_message" : SystemMessagePromptTemplate.from_template(MAHJONG_PREFIX_TEMPLATE),
+            "extra_prompt_messages": [
+                #self._chat_history,
+                self._character_prompt,
+                #SystemMessagePromptTemplate.from_template(MAHJONG_SUFFIX_PROMPT)
+                ]
+        }
+
+        self._mahjong_tools = [
+            run_mahjong_chain,
+        ]
+        self._mahjong_agent = initialize_agent(
+            self._mahjong_tools,
+            self._llm_zero,
+            agent=AgentType.OPENAI_FUNCTIONS,
+            verbose=self._verbose,
+            agent_kwargs=agent_kwargs,
+            memory=self._read_only_memory,
+        )
+
         self._chat_agent = get_chat_tool(
             llm=self._llm,
             chat_history=self._chat_history,
@@ -190,6 +218,14 @@ class Executor:
                 name="DEFAULT",
                 description="一般的な会話の担当者です。一般的で特定の専門家に任せるべきではない会話や抽象的な質問に対して詳細化を促す場合の対応はこの担当者に任せるべきです。",
                 args_schema=ChatAgentInput,
+                return_direct=True,
+            ),
+            #self._mahjong_agent,
+            Tool.from_function(
+                func=self._mahjong_agent.run,
+                name="mahjong_agent",
+                description="麻雀アプリの起動、およびそのゲーム進行を担当します。",
+                #args_schema=MahjongAgentInput,
                 return_direct=True,
             ),
         ]

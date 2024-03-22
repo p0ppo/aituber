@@ -21,6 +21,10 @@ sentence-transformers = "<=2.5.0"
 pytchat = "<=0.5.5"
 obsws-python = "<=1.7.0"
 chainlit = "<=1.0.301"
+pytorch-lightning = "<=2.2"
+scikit-learn = "<=1.4"
+tensorboardx = "<=2.6.2"
+gym = "<=0.26.2"
 
 
 [build-system]

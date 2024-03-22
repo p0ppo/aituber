@@ -168,3 +168,4 @@ vec/
 legacy/
 templates/
 .chainlit/
+logs/

@@ -8,7 +8,8 @@ class SoundPlayer:
         # Do not change
         self._output_device = "CABLE Input"
 
-        self._output_device_id = self._search_id(self._output_device)
+        #self._output_device_id = self._search_id(self._output_device)
+        self._output_device_id = 1
         self._input_device_id = 0
 
         sd.default.device = [

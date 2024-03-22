@@ -1,12 +1,20 @@
 import os
+import subprocess
+import glob
 import dotenv
 import time
 import click
 
-#from .core.agent import Agent, SoundPlayer, VoicePeak
 from .agent import Executor, SoundPlayer, VoicePeak
-#from .core.agent import ChiefAgent, SoundPlayer, VoicePeak
 from .network import CommentHandler, OBSHandler
+
+
+def convert_path_unix2win(path):
+    return subprocess.run(
+        ["wslpath", "-m", path],
+        capture_output=True,
+        text=True
+    ).stdout
 
 
 class AITuber:
@@ -20,8 +28,6 @@ class AITuber:
         self._setup_network()
     
     def _setup_core(self):
-        #self._agent = Agent(segment=True)
-        #self._agent = ChiefAgent(segment=True)
         self._agent = Executor(segment=True, verbose=True)
         self._player = SoundPlayer()
         self._tts = VoicePeak(player=self._player)
@@ -44,6 +50,12 @@ class AITuber:
 
         self._obs_handler.set_text("question", comment)
         self._obs_handler.set_text("answer", response)
+
+        # FIXME: run task specific handler on event, not always
+        mahjong_svg_path = sorted(glob.glob(os.path.join(os.environ.get("MAHJONG_LOG_DIR"), "*.svg")), reverse=True)[0]
+        mahjong_svg_path_win = convert_path_unix2win(mahjong_svg_path)
+        self._obs_handler.set_html("mahjong", mahjong_svg_path_win)
+
         self._tts.run(segments)
         self._tts.play()
         return

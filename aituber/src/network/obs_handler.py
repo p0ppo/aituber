@@ -21,6 +21,24 @@ class OBSHandler:
             settings={"text": text},
             overlay=True,
             )
+    
+    def set_html(self, source , path):
+        # Assuming there's visible html window on OBS
+        # The following command is refreshing the cache of it
+        # FIXME: Require scene transition function 
+        # from normal chat layout to html embedded layout
+        self.ws.press_input_properties_button(
+            input_name=source, 
+            prop_name="refreshnocache"
+            )
+        #self.ws.set_input_settings(
+        #    name=source,
+        #    settings={
+        #        "local file": path, 
+        #        #"restart_when_active": True
+        #    },
+        #    overlay=True,
+        #)
 
 
 if __name__ == "__main__":
